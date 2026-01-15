@@ -32,7 +32,6 @@ st.title("🍽️ SmartPlate Prototype")
 st.markdown("### The AI Meal Planner that respects your schedule.")
 
 # --- API KEY SETUP ---
-# In the real app, this comes from the server secrets
 api_key = st.secrets.get("GOOGLE_API_KEY")
 
 if not api_key:
@@ -48,9 +47,8 @@ if st.button("🚀 Generate Meal Plan"):
     
     with st.spinner("Analyzing your schedule..."):
         # 1. SIMULATE CALENDAR DATA (Placeholder for now)
-        # In the next phase, we connect this to real Google Calendar OAuth
         events_summary = """
-        (Simulated Calendar Data)
+        (Simulated Calendar Data for Testing)
         - Wednesday: Sax Lesson (4:30 PM - 5:00 PM)
         - Thursday: Basketball Game (Ends 6:30 PM)
         - Friday: No Events
@@ -87,10 +85,13 @@ if st.button("🚀 Generate Meal Plan"):
             f"4. **Output Format:** Provide a Markdown table with columns: Date, Meal Name, Logic Used, Prep Time."
         )
 
-        # 3. CALL GEMINI
+        # 3. CALL GEMINI (STABLE SYNTAX)
         try:
-            client = genai.Client(api_key=api_key)
-            response = client.models.generate_content(model='gemini-flash-latest', contents=prompt_plan)
+            # FIX: Use configure + GenerativeModel instead of Client
+            genai.configure(api_key=api_key)
+            model = genai.GenerativeModel('gemini-1.5-flash')
+            
+            response = model.generate_content(prompt_plan)
             
             st.success("Plan Generated!")
             st.markdown("### 📅 Your Smart Plan")
@@ -103,7 +104,8 @@ if st.button("🚀 Generate Meal Plan"):
                     f"{response.text}\n"
                     f"Group by: 🛒 DEFINITELY NEED, 🔍 CHECK STOCK, 🧂 PANTRY."
                 )
-                res_shop = client.models.generate_content(model='gemini-flash-latest', contents=prompt_shopping)
+                # Re-use the configured model
+                res_shop = model.generate_content(prompt_shopping)
                 
                 st.markdown("---")
                 st.markdown("### 🛒 Consolidated Shopping List")
