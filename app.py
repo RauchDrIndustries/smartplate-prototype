@@ -85,11 +85,11 @@ if st.button("🚀 Generate Meal Plan"):
             f"4. **Output Format:** Provide a Markdown table with columns: Date, Meal Name, Logic Used, Prep Time."
         )
 
-        # 3. CALL GEMINI (STABLE SYNTAX)
+        # 3. CALL GEMINI (STABLE MODEL)
         try:
-            # FIX: Use configure + GenerativeModel instead of Client
             genai.configure(api_key=api_key)
-            model = genai.GenerativeModel('gemini-1.5-flash')
+            # SWITCHED TO GEMINI-PRO (The Standard)
+            model = genai.GenerativeModel('gemini-pro')
             
             response = model.generate_content(prompt_plan)
             
@@ -104,7 +104,6 @@ if st.button("🚀 Generate Meal Plan"):
                     f"{response.text}\n"
                     f"Group by: 🛒 DEFINITELY NEED, 🔍 CHECK STOCK, 🧂 PANTRY."
                 )
-                # Re-use the configured model
                 res_shop = model.generate_content(prompt_shopping)
                 
                 st.markdown("---")
