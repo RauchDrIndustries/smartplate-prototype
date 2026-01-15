@@ -85,11 +85,11 @@ if st.button("🚀 Generate Meal Plan"):
             f"4. **Output Format:** Provide a Markdown table with columns: Date, Meal Name, Logic Used, Prep Time."
         )
 
-        # 3. CALL GEMINI (USING GEMINI 2.0 FLASH)
+        # 3. CALL GEMINI (USING THE STABLE 'FLASH' ALIAS)
         try:
             genai.configure(api_key=api_key)
-            # The exact string from your available list:
-            model = genai.GenerativeModel('models/gemini-2.0-flash')
+            # FIX: Use the specific alias that appeared in your list
+            model = genai.GenerativeModel('models/gemini-flash-latest')
             
             response = model.generate_content(prompt_plan)
             
