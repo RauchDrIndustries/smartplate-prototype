@@ -82,19 +82,23 @@ if st.button("🚀 Generate Meal Plan"):
             f"1. **Analyze Gaps:** Look at Arrival Time ({arrival_time}) vs Event Start.\n"
             f"2. **Traffic Light Logic:** Green (>90m), Yellow (45-90m), Red (<45m).\n"
             f"3. **The Late Start:** If event ends 5:15-6:00 PM, give 2 options.\n"
-            f"4. **Output Format:** Provide a Markdown table with columns: Date, Meal Name, Logic Used, Prep Time."
+            f"4. **Output Format:** Provide a Markdown table with exactly these columns:\n"
+            f"   | Date | 📅 Schedule (The Constraint) | 🍽️ The Meal Plan | 📝 Prep Notes |\n"
+            f"   - **Schedule Column:** List the event times briefly (e.g. 'Sax Lesson 4:30-5:00').\n"
+            f"   - **Meal Column:** The Name of the dish.\n"
+            f"   - **Prep Notes:** Active cooking time + The 'Why' (e.g. '20 mins - Quick cook due to late arrival')."
         )
 
-        # 3. CALL GEMINI (USING THE STABLE 'FLASH' ALIAS)
+        # 3. CALL GEMINI (USING GEMINI FLASH LATEST)
         try:
             genai.configure(api_key=api_key)
-            # FIX: Use the specific alias that appeared in your list
             model = genai.GenerativeModel('models/gemini-flash-latest')
             
             response = model.generate_content(prompt_plan)
             
             st.success("Plan Generated!")
-            st.markdown("### 📅 Your Smart Plan")
+            st.markdown("### 📅 Your Smart Schedule")
+            # This renders the table beautifully in Streamlit
             st.markdown(response.text)
             
             # 4. SHOPPING LIST
